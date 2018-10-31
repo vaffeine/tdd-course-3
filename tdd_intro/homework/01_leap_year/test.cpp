@@ -16,7 +16,7 @@ If your language provides a method in the standard library that does this look-u
 
 bool is_leap_year(uint64_t year)
 {
-    if (year == 800) {
+    if (year % 400 == 0) {
         return true;
     }
     return false;
