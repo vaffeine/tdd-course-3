@@ -16,13 +16,7 @@ If your language provides a method in the standard library that does this look-u
 
 bool is_leap_year(uint64_t year)
 {
-    if (year % 400 == 0) {
-        return true;
-    }
-    if (year % 4 == 0) {
-        return true;
-    }
-    return false;
+    return year % 400 == 0 || year % 4 == 0;
 }
 
 TEST(LeapYear, TestDivisible400)
