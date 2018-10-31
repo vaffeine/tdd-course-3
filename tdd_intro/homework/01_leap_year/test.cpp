@@ -32,6 +32,11 @@ TEST(LeapYear, TestDivisible400AndNot800)
     ASSERT_TRUE(is_leap_year(1200));
 }
 
+TEST(LeapYear, TestDivisible4ButNot100)
+{
+    ASSERT_TRUE(is_leap_year(2012));
+}
+
 TEST(LeapYear, TestNotDivisible4_400_100)
 {
     ASSERT_FALSE(is_leap_year(2017));
