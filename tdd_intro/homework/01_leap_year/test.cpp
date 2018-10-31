@@ -19,6 +19,11 @@ bool is_leap_year(uint64_t)
     return false;
 }
 
+TEST(LeapYear, TestDivisible400)
+{
+    ASSERT_TRUE(is_leap_year(800));
+}
+
 TEST(LeapYear, TestNotDivisible4_400_100)
 {
     ASSERT_FALSE(is_leap_year(2017));
