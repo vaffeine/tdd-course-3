@@ -14,6 +14,11 @@ If your language provides a method in the standard library that does this look-u
 
 #include <gtest/gtest.h>
 
+bool is_leap_year(uint64_t)
+{
+    return false;
+}
+
 TEST(LeapYear, TestNotDivisible4_400_100)
 {
     ASSERT_FALSE(is_leap_year(2017));
