@@ -14,8 +14,11 @@ If your language provides a method in the standard library that does this look-u
 
 #include <gtest/gtest.h>
 
-bool is_leap_year(uint64_t)
+bool is_leap_year(uint64_t year)
 {
+    if (year == 800) {
+        return true;
+    }
     return false;
 }
 
