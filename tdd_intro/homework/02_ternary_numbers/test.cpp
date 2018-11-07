@@ -34,3 +34,7 @@ TEST(parse_ternary, test_empty_string_is_zero) {
 TEST(parse_ternary, test_one_is_one) {
     ASSERT_EQ(parse_ternary("1"), 1u);
 }
+
+TEST(parse_ternary, test_one_zero_is_three) {
+    ASSERT_EQ(parse_ternary("10"), 3u);
+}
