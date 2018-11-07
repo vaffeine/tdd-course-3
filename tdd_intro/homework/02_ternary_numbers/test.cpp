@@ -21,6 +21,8 @@ If your language provides a method in the standard library to perform the conver
 */
 
 uint32_t parse_ternary(const std::string &str) {
+    const uint32_t BASE = 3;
+
     if (str.empty()) {
         return 0;
     }
@@ -28,11 +30,11 @@ uint32_t parse_ternary(const std::string &str) {
     uint32_t result = 0;
     for (size_t i = 0; i < str.size(); ++i) {
         uint32_t v = str[i] - '0';
-        if (v > 2) {
+        if (v >= BASE) {
             return 0;
         }
 
-        result += v * std::pow(3, str.size() - i - 1);
+        result += v * std::pow(BASE, str.size() - i - 1);
     }
 
     return result;
