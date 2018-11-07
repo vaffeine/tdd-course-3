@@ -26,3 +26,7 @@ uint32_t parse_ternary(const std::string &str) {
 TEST(parse_ternary, test_empty_string_is_zero) {
     ASSERT_EQ(parse_ternary(""), 0u);
 }
+
+TEST(parse_ternary, test_one_is_one) {
+    ASSERT_EQ(parse_ternary("1"), 1u);
+}
