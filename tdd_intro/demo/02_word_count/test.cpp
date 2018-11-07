@@ -19,6 +19,14 @@ such: 1
 
 std::map<std::string, uint32_t> count_words(const std::string &phrase) {
     std::map<std::string, uint32_t> result;
+    std::istringstream phrase_iss(phrase);
+    std::vector<std::string> words {
+        std::istream_iterator<std::string>(phrase_iss),
+        std::istream_iterator<std::string>()
+    };
+    if (!words.empty()) {
+        result[words[0]] = 1;
+    }
     return result;
 }
 
