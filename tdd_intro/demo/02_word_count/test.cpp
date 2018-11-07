@@ -17,6 +17,11 @@ such: 1
 #include <string>
 #include <map>
 
+std::map<std::string, uint32_t> count_words(const std::string &phrase) {
+    std::map<std::string, uint32_t> result;
+    return result;
+}
+
 TEST(count_words, test_empty_string_ret_empty_map) {
     std::map<std::string, uint32_t> expected;
     ASSERT_EQ(count_words(""), expected);
