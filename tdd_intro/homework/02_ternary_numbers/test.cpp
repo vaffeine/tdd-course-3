@@ -27,7 +27,12 @@ uint32_t parse_ternary(const std::string &str) {
 
     uint32_t result = 0;
     for (size_t i = 0; i < str.size(); ++i) {
-        result += uint32_t(str[i] - '0') * std::pow(3, str.size() - i - 1);
+        uint32_t v = str[i] - '0';
+        if (v > 2) {
+            return 0;
+        }
+
+        result += v * std::pow(3, str.size() - i - 1);
     }
 
     return result;
