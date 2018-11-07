@@ -24,8 +24,8 @@ std::map<std::string, uint32_t> count_words(const std::string &phrase) {
         std::istream_iterator<std::string>(phrase_iss),
         std::istream_iterator<std::string>()
     };
-    if (!words.empty()) {
-        result[words[0]] = 1;
+    for (auto &word: words) {
+        result[word] += 1;
     }
     return result;
 }
