@@ -20,7 +20,11 @@ If your language provides a method in the standard library to perform the conver
 */
 
 uint32_t parse_ternary(const std::string &str) {
-    return 0;
+    if (str.empty()) {
+        return 0;
+    }
+
+    return std::stoul(str);
 }
 
 TEST(parse_ternary, test_empty_string_is_zero) {
