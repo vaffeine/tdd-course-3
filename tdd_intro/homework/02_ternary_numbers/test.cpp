@@ -1,3 +1,5 @@
+#include <string>
+
 #include <gtest/gtest.h>
 
 /*
@@ -16,6 +18,10 @@ The last place in a ternary number is the 1's place. The second to last is the 3
 
 If your language provides a method in the standard library to perform the conversion, pretend it doesn't exist and implement it yourself.
 */
+
+uint32_t parse_ternary(const std::string &str) {
+    return 0;
+}
 
 TEST(parse_ternary, test_empty_string_is_zero) {
     ASSERT_EQ(parse_ternary(""), 0);
