@@ -1,4 +1,5 @@
 #include <string>
+#include <cmath>
 
 #include <gtest/gtest.h>
 
@@ -24,7 +25,12 @@ uint32_t parse_ternary(const std::string &str) {
         return 0;
     }
 
-    return std::stoul(str);
+    uint32_t result = 0;
+    for (size_t i = 0; i < str.size(); ++i) {
+        result += uint32_t(str[i] - '0') * std::pow(3, str.size() - i - 1);
+    }
+
+    return result;
 }
 
 TEST(parse_ternary, test_empty_string_is_zero) {
