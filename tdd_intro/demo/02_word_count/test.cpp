@@ -27,3 +27,9 @@ TEST(count_words, test_empty_string_ret_empty_map) {
     ASSERT_EQ(count_words(""), expected);
 }
 
+TEST(count_words, test_one_word_ret_one_word) {
+    std::string word = "olly";
+    std::map<std::string, uint32_t> expected = {{word, 1}};
+    ASSERT_EQ(count_words(word), expected);
+}
+
