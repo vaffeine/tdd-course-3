@@ -234,6 +234,11 @@ uint8_t parse_digit(const Digit &digit) {
     return 10;
 }
 
+std::vector<uint8_t> parse_display(const Display &display) {
+    std::vector<uint8_t> result;
+    return result;
+}
+
 TEST(TestGetDigit, test_digit_has_3_columns) {
     Digit result = get_digit(s_displayAll0, 0);
     ASSERT_EQ(result.lines[0].size(), 3lu);
