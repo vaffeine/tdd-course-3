@@ -235,7 +235,7 @@ uint8_t parse_digit(const Digit &digit) {
 }
 
 std::vector<uint8_t> parse_display(const Display &display) {
-    std::vector<uint8_t> result;
+    std::vector<uint8_t> result(9);
     return result;
 }
 
