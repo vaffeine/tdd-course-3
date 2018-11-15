@@ -215,3 +215,11 @@ TEST(TestGetDigit, test_digit_has_3_rows) {
     ASSERT_EQ(result.lines[1].size(), 3lu);
     ASSERT_EQ(result.lines[2].size(), 3lu);
 }
+
+TEST(TestGetDigit, test_invalid_symbols_leads_to_exception) {
+    const Display invalid_char_digit = { " _  _  _  _  _  _  _  _  _ ",
+                                         "# || || || || || || || || |",
+                                         "|#||_||_||_||_||_||_||_||_|"
+    };
+    ASSERT_THROW(get_digit(invalid_char_digit, 0), std::runtime_error);
+}
