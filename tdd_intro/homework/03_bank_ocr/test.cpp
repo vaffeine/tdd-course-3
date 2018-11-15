@@ -206,3 +206,10 @@ TEST(TestGetDigit, test_digit_has_3_columns) {
     Digit result = get_digit(s_displayAll0, 0);
     ASSERT_EQ(result.lines[0].size(), 3lu);
 }
+
+TEST(TestGetDigit, test_digit_has_3_rows) {
+    Digit result = get_digit(s_displayAll0, 0);
+    ASSERT_EQ(result.lines[0].size(), 3lu);
+    ASSERT_EQ(result.lines[1].size(), 3lu);
+    ASSERT_EQ(result.lines[2].size(), 3lu);
+}
