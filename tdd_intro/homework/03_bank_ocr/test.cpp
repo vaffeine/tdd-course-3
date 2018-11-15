@@ -200,6 +200,11 @@ Digit get_digit(const Display &display, size_t index) {
     Digit result;
     for (size_t i = 0; i < g_linesInDigit; ++i) {
         result.lines[i] = display.lines[i].substr(0, g_digitLen);
+        for (auto c: result.lines[i]) {
+            if (c != ' ' && c != '_' && c != '|') {
+                throw std::runtime_error("Wrong char in digit");
+            }
+        }
     }
     return result;
 }
