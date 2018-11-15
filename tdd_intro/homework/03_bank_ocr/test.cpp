@@ -231,7 +231,7 @@ uint8_t parse_digit(const Digit &digit) {
         }
     }
 
-    return 10;
+    throw std::runtime_error("Not a digit");
 }
 
 std::vector<uint8_t> parse_display(const Display &display) {
