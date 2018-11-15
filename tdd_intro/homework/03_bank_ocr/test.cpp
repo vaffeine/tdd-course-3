@@ -95,6 +95,12 @@ struct Digit
 };
 
 bool operator==(const Digit &lhs, const Digit &rhs) {
+    for (size_t i = 0; i < g_linesInDigit; ++i) {
+        if (lhs.lines[i] != rhs.lines[i]) {
+            return false;
+        }
+    }
+
     return true;
 }
 
