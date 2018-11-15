@@ -277,6 +277,14 @@ TEST(TestParseDigit, test_digit5_is_5) {
     ASSERT_EQ(parse_digit(s_digit5), 5);
 }
 
+TEST(TestParseDigit, test_invalid_digit_leads_to_exception) {
+    const Digit invalid_digit = { " _ ",
+                                  "| |",
+                                  "| |"
+                                };
+    ASSERT_THROW(parse_digit(invalid_digit), std::runtime_error);
+}
+
 TEST(TestParseDisplay, test_parse_123456789_display_is_9_length) {
     ASSERT_EQ(parse_display(s_display123456789).size(), g_digitsOnDisplay);
 }
