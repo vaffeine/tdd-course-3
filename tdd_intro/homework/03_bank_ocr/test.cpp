@@ -267,6 +267,10 @@ TEST(TestParseDigit, test_digit5_is_5) {
     ASSERT_EQ(parse_digit(s_digit5), 5);
 }
 
+TEST(TestParseDisplay, test_parse_123456789_display_is_9_length) {
+    ASSERT_EQ(parse_display(s_display123456789).size(), g_digitsOnDisplay);
+}
+
 TEST(TestDigitOperEqual, test_that_same_digit_is_equal) {
     ASSERT_EQ(s_digit0, s_digit0);
 }
