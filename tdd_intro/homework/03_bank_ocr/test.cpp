@@ -219,12 +219,19 @@ Digit get_digit(const Display &display, size_t index) {
     return result;
 }
 
+const Digit s_allDigits[10] = {
+    s_digit0, s_digit1, s_digit2, s_digit3, s_digit4,
+    s_digit5, s_digit6, s_digit7, s_digit8, s_digit9
+};
+
 uint8_t parse_digit(const Digit &digit) {
-    if (digit == s_digit0) {
-        return 0;
-    } else {
-        return 10;
+    for (size_t i = 0; i < 10; ++i) {
+        if (digit == s_allDigits[i]) {
+            return i;
+        }
     }
+
+    return 10;
 }
 
 TEST(TestGetDigit, test_digit_has_3_columns) {
