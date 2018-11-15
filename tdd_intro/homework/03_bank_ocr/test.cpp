@@ -256,6 +256,10 @@ TEST(TestParseDigit, test_digit0_is_0) {
     ASSERT_EQ(parse_digit(s_digit0), 0);
 }
 
+TEST(TestParseDigit, test_digit5_is_5) {
+    ASSERT_EQ(parse_digit(s_digit5), 5);
+}
+
 TEST(TestDigitOperEqual, test_that_same_digit_is_equal) {
     ASSERT_EQ(s_digit0, s_digit0);
 }
