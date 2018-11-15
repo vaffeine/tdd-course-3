@@ -235,7 +235,12 @@ uint8_t parse_digit(const Digit &digit) {
 }
 
 std::vector<uint8_t> parse_display(const Display &display) {
-    std::vector<uint8_t> result(9);
+    std::vector<uint8_t> result;
+    for (size_t i = 0; i < g_digitsOnDisplay; ++i) {
+        auto digit = get_digit(display, i);
+        auto parsed_digit = parse_digit(digit);
+        result.push_back(parsed_digit);
+    }
     return result;
 }
 
@@ -274,6 +279,11 @@ TEST(TestParseDigit, test_digit5_is_5) {
 
 TEST(TestParseDisplay, test_parse_123456789_display_is_9_length) {
     ASSERT_EQ(parse_display(s_display123456789).size(), g_digitsOnDisplay);
+}
+
+TEST(TestParseDisplay, test_parse_123456789_display_is_123456789) {
+    std::vector<uint8_t> result = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    ASSERT_EQ(parse_display(s_display123456789), result);
 }
 
 TEST(TestDigitOperEqual, test_that_same_digit_is_equal) {
