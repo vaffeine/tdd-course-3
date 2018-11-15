@@ -94,6 +94,10 @@ struct Digit
     std::string lines[g_linesInDigit];
 };
 
+bool operator==(const Digit &lhs, const Digit &rhs) {
+    return false;
+}
+
 const unsigned short g_digitsOnDisplay = 9;
 struct Display
 {
