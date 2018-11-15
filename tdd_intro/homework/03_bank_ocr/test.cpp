@@ -239,6 +239,11 @@ TEST(TestGetDigit, test_invalid_symbols_leads_to_exception) {
     ASSERT_THROW(get_digit(invalid_char_digit, 0), std::runtime_error);
 }
 
+TEST(TestGetDigit, test_5th_digit_is_5) {
+    Digit result = get_digit(s_display123456789, 5);
+    ASSERT_EQ(result, s_digit5);
+}
+
 TEST(TestDigitOperEqual, test_that_same_digit_is_equal) {
     ASSERT_EQ(s_digit0, s_digit0);
 }
