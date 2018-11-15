@@ -209,7 +209,7 @@ const Display s_display123456789 = { "    _  _     _  _  _  _  _ ",
 Digit get_digit(const Display &display, size_t index) {
     Digit result;
     for (size_t i = 0; i < g_linesInDigit; ++i) {
-        result.lines[i] = display.lines[i].substr(0, g_digitLen);
+        result.lines[i] = display.lines[i].substr(3 * index, g_digitLen);
         for (auto c: result.lines[i]) {
             if (c != ' ' && c != '_' && c != '|') {
                 throw std::runtime_error("Wrong char in digit");
@@ -240,7 +240,7 @@ TEST(TestGetDigit, test_invalid_symbols_leads_to_exception) {
 }
 
 TEST(TestGetDigit, test_5th_digit_is_5) {
-    Digit result = get_digit(s_display123456789, 5);
+    Digit result = get_digit(s_display123456789, 4);
     ASSERT_EQ(result, s_digit5);
 }
 
