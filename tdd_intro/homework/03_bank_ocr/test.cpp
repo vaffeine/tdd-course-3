@@ -198,9 +198,7 @@ const Display s_display123456789 = { "    _  _     _  _  _  _  _ ",
 
 Digit get_digit(const Display &display, size_t index) {
     Digit result;
-    result.lines[0].push_back(display.lines[0][0]);
-    result.lines[0].push_back(display.lines[0][1]);
-    result.lines[0].push_back(display.lines[0][2]);
+    result.lines[0] = display.lines[0].substr(0, g_digitLen);
     return result;
 }
 
