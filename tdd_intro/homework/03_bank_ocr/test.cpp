@@ -220,7 +220,11 @@ Digit get_digit(const Display &display, size_t index) {
 }
 
 uint8_t parse_digit(const Digit &digit) {
-    return 10;
+    if (digit == s_digit0) {
+        return 0;
+    } else {
+        return 10;
+    }
 }
 
 TEST(TestGetDigit, test_digit_has_3_columns) {
