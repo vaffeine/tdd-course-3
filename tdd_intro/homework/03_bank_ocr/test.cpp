@@ -197,7 +197,11 @@ const Display s_display123456789 = { "    _  _     _  _  _  _  _ ",
 };
 
 Digit get_digit(const Display &display, size_t index) {
-    return Digit();
+    Digit result;
+    result.lines[0].push_back(display.lines[0][0]);
+    result.lines[0].push_back(display.lines[0][1]);
+    result.lines[0].push_back(display.lines[0][2]);
+    return result;
 }
 
 TEST(TestGetDigit, test_digit_has_3_columns) {
