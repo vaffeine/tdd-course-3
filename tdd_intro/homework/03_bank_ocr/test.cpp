@@ -95,7 +95,7 @@ struct Digit
 };
 
 bool operator==(const Digit &lhs, const Digit &rhs) {
-    return false;
+    return true;
 }
 
 const unsigned short g_digitsOnDisplay = 9;
