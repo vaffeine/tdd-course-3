@@ -236,3 +236,7 @@ TEST(TestGetDigit, test_invalid_symbols_leads_to_exception) {
 TEST(TestDigitOperEqual, test_that_same_digit_is_equal) {
     ASSERT_EQ(s_digit0, s_digit0);
 }
+
+TEST(TestDigitOperEqual, test_different_digits_are_not_equal) {
+    ASSERT_FALSE(s_digit0 == s_digit8);
+}
