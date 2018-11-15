@@ -195,3 +195,8 @@ const Display s_display123456789 = { "    _  _     _  _  _  _  _ ",
                                      "  | _| _||_||_ |_   ||_||_|",
                                      "  ||_  _|  | _||_|  ||_| _|"
 };
+
+TEST(TestGetDigit, test_digit_has_3_columns) {
+    Digit result = get_digit(s_displayAll0, 0);
+    ASSERT_EQ(result.lines[0].size(), 3lu);
+}
