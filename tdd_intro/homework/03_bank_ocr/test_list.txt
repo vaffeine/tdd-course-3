@@ -1,0 +1,9 @@
+# User Story 1
+
+1. Parsed first digit has 3 columns
+2. Parsed first digit has 3 rows
+3. Parsing of first digit, which contains invalid symbol, throws an exception
+3. Parsed first digit is 0
+4. Parsed 000000000 is 000000000
+5. Parsed 123456789 is 123456789
+6. Parsing of invalid digit, which contains only valid symbols, throws an exception
