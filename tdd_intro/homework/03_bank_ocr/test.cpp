@@ -219,6 +219,10 @@ Digit get_digit(const Display &display, size_t index) {
     return result;
 }
 
+uint8_t parse_digit(const Digit &digit) {
+    return 10;
+}
+
 TEST(TestGetDigit, test_digit_has_3_columns) {
     Digit result = get_digit(s_displayAll0, 0);
     ASSERT_EQ(result.lines[0].size(), 3lu);
