@@ -47,6 +47,16 @@ IMPORTANT:
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+template<typename T>
+size_t parse_int(const std::string& str, size_t pos, T &out)
+{
+    auto next_pos = str.find(";", pos);
+    std::string tmp = str.substr(pos, next_pos);
+    out = std::stoi(tmp);
+
+    return next_pos;
+}
+
 struct Weather
 {
     short temperature = 0;
@@ -55,8 +65,8 @@ struct Weather
 
     Weather(const std::string& str)
     {
-        std::string temp = str.substr(0, str.find(";"));
-        temperature = std::stoi(temp);
+        auto temp_pos = parse_int(str, 0, temperature);
+        auto dir_pos = parse_int(str, temp_pos + 1, windDirection);
     }
 
     bool operator==(const Weather& right)
@@ -132,4 +142,8 @@ TEST(WeatherClientTest, average_temp_for_same_return_it) {
 
 TEST(WeatherTest, temperature_is_parsed_correctly) {
     ASSERT_EQ(Weather("20;181;5.1").temperature, 20);
+}
+
+TEST(WeatherTest, wind_direction_is_parsed_correctly) {
+    ASSERT_EQ(Weather("20;181;5.1").windDirection, 181);
 }
