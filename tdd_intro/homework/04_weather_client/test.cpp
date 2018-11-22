@@ -182,6 +182,23 @@ TEST(WeatherClientTest, average_temp_for_4_different_return_their_average) {
 
     ASSERT_EQ(client.GetAverageTemperature(server, "31.08.2018"), 17.5);
 }
+
+TEST(WeatherClientTest, min_temp_for_4_different_return_their_average) {
+    static const std::string RESULTS[WEATHER_RECORDS_PER_DAY] = {
+        "10;181;5.1", "15;181;5.1", "20;181;5.1", "25;181;5.1"
+    };
+
+    MockWeatherServer server;
+    WeatherClient client;
+
+    for (size_t i = 0; i < WEATHER_RECORDS_PER_DAY; ++i) {
+        EXPECT_CALL(server, GetWeather("31.08.2018;" + WEATHER_TIMES[i]))
+            .WillRepeatedly(Return(RESULTS[i]));
+    }
+
+    ASSERT_EQ(client.GetMinimumTemperature(server, "31.08.2018"), 10.0);
+}
+
 TEST(WeatherTest, temperature_is_parsed_correctly) {
     ASSERT_EQ(Weather("20;181;5.1").temperature, 20);
 }
