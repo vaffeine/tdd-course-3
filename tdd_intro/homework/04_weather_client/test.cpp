@@ -53,7 +53,11 @@ struct Weather
     unsigned short windDirection = 0;
     double windSpeed = 0;
 
-    Weather(const std::string& str) {  }
+    Weather(const std::string& str)
+    {
+        std::string temp = str.substr(0, str.find(";"));
+        temperature = std::stoi(temp);
+    }
 
     bool operator==(const Weather& right)
     {
