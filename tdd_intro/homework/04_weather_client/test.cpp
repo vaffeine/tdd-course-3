@@ -123,6 +123,12 @@ public:
 
     double GetMinimumTemperature(IWeatherServer& server, const std::string& date) override
     {
+        double min = Weather(server.GetWeather(date + ";" + WEATHER_TIMES[0])).temperature;
+        for (size_t i = 1; i < WEATHER_RECORDS_PER_DAY; ++i) {
+            double temp = Weather(server.GetWeather(date + ";" + WEATHER_TIMES[i])).temperature;
+            min = std::min(temp, min);
+        }
+        return min;
     }
 
     double GetMaximumTemperature(IWeatherServer& server, const std::string& date) override
