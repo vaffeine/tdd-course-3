@@ -116,7 +116,9 @@ public:
     {
         Weather w1(server.GetWeather(date + ";" + WEATHER_TIMES[0]));
         Weather w2(server.GetWeather(date + ";" + WEATHER_TIMES[1]));
-        return (w1.temperature + w2.temperature) / 2;
+        Weather w3(server.GetWeather(date + ";" + WEATHER_TIMES[2]));
+        Weather w4(server.GetWeather(date + ";" + WEATHER_TIMES[3]));
+        return (w1.temperature + w2.temperature + w3.temperature + w4.temperature) / 4.0;
     }
 
     double GetMinimumTemperature(IWeatherServer& server, const std::string& date) override
@@ -165,6 +167,21 @@ TEST(WeatherClientTest, average_temp_for_2_different_return_their_average) {
     ASSERT_EQ(client.GetAverageTemperature(server, "31.08.2018"), 15);
 }
 
+TEST(WeatherClientTest, average_temp_for_4_different_return_their_average) {
+    static const std::string RESULTS[WEATHER_RECORDS_PER_DAY] = {
+        "10;181;5.1", "15;181;5.1", "20;181;5.1", "25;181;5.1"
+    };
+
+    MockWeatherServer server;
+    WeatherClient client;
+
+    for (size_t i = 0; i < WEATHER_RECORDS_PER_DAY; ++i) {
+        EXPECT_CALL(server, GetWeather("31.08.2018;" + WEATHER_TIMES[i]))
+            .WillRepeatedly(Return(RESULTS[i]));
+    }
+
+    ASSERT_EQ(client.GetAverageTemperature(server, "31.08.2018"), 17.5);
+}
 TEST(WeatherTest, temperature_is_parsed_correctly) {
     ASSERT_EQ(Weather("20;181;5.1").temperature, 20);
 }
