@@ -114,11 +114,11 @@ class WeatherClient: public IWeatherClient
 public:
     double GetAverageTemperature(IWeatherServer& server, const std::string& date) override
     {
-        Weather w1(server.GetWeather(date + ";" + WEATHER_TIMES[0]));
-        Weather w2(server.GetWeather(date + ";" + WEATHER_TIMES[1]));
-        Weather w3(server.GetWeather(date + ";" + WEATHER_TIMES[2]));
-        Weather w4(server.GetWeather(date + ";" + WEATHER_TIMES[3]));
-        return (w1.temperature + w2.temperature + w3.temperature + w4.temperature) / 4.0;
+        double sum = 0.0;
+        for (auto &time: WEATHER_TIMES) {
+            sum += Weather(server.GetWeather(date + ";" + time)).temperature;
+        }
+        return sum / 4.0;
     }
 
     double GetMinimumTemperature(IWeatherServer& server, const std::string& date) override
