@@ -68,6 +68,12 @@ public:
     virtual std::string GetWeather(const std::string& request) = 0;
 };
 
+class MockWeatherServer: public IWeatherServer
+{
+public:
+    MOCK_METHOD1(GetWeather, std::string(const std::string& request));
+};
+
 // Implement this interface
 class IWeatherClient
 {
@@ -79,3 +85,40 @@ public:
     virtual double GetAverageWindDirection(IWeatherServer& server, const std::string& date) = 0;
     virtual double GetMaximumWindSpeed(IWeatherServer& server, const std::string& date) = 0;
 };
+
+class WeatherClient: public IWeatherClient
+{
+public:
+    double GetAverageTemperature(IWeatherServer& server, const std::string& date) override
+    {
+    }
+
+    double GetMinimumTemperature(IWeatherServer& server, const std::string& date) override
+    {
+    }
+
+    double GetMaximumTemperature(IWeatherServer& server, const std::string& date) override
+    {
+    }
+
+    double GetAverageWindDirection(IWeatherServer& server, const std::string& date) override
+    {
+    }
+
+    double GetMaximumWindSpeed(IWeatherServer& server, const std::string& date) override
+    {
+    }
+};
+
+using ::testing::Return;
+using ::testing::_;
+
+TEST(WeatherClientTest, average_temp_for_same_return_it) {
+    MockWeatherServer server;
+    WeatherClient client;
+
+    EXPECT_CALL(server, GetWeather(_))
+        .WillRepeatedly(Return("20;181;5.1"));
+
+    ASSERT_EQ(client.GetAverageTemperature(server, "31.08.2018"), 20);
+}
