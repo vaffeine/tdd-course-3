@@ -104,13 +104,18 @@ public:
     virtual double GetMaximumWindSpeed(IWeatherServer& server, const std::string& date) = 0;
 };
 
+static const size_t WEATHER_RECORDS_PER_DAY = 4;
+static const std::string WEATHER_TIMES[WEATHER_RECORDS_PER_DAY] = {
+    "03:00", "09:00", "15:00", "21:00"
+};
+
 class WeatherClient: public IWeatherClient
 {
 public:
     double GetAverageTemperature(IWeatherServer& server, const std::string& date) override
     {
-        Weather w1(server.GetWeather(date + ";03:00"));
-        Weather w2(server.GetWeather(date + ";09:00"));
+        Weather w1(server.GetWeather(date + ";" + WEATHER_TIMES[0]));
+        Weather w2(server.GetWeather(date + ";" + WEATHER_TIMES[1]));
         return (w1.temperature + w2.temperature) / 2;
     }
 
@@ -145,20 +150,17 @@ TEST(WeatherClientTest, average_temp_for_same_return_it) {
 }
 
 TEST(WeatherClientTest, average_temp_for_2_different_return_their_average) {
+    static const std::string RESULTS[WEATHER_RECORDS_PER_DAY] = {
+        "20;181;5.1", "10;181;5.1", "20;181;5.1", "10;181;5.1"
+    };
+
     MockWeatherServer server;
     WeatherClient client;
 
-    EXPECT_CALL(server, GetWeather("31.08.2018;03:00"))
-        .WillRepeatedly(Return("20;181;5.1"));
-
-    EXPECT_CALL(server, GetWeather("31.08.2018;09:00"))
-        .WillRepeatedly(Return("10;181;5.1"));
-
-    EXPECT_CALL(server, GetWeather("31.08.2018;15:00"))
-        .WillRepeatedly(Return("20;181;5.1"));
-
-    EXPECT_CALL(server, GetWeather("31.08.2018;21:00"))
-        .WillRepeatedly(Return("10;181;5.1"));
+    for (size_t i = 0; i < WEATHER_RECORDS_PER_DAY; ++i) {
+        EXPECT_CALL(server, GetWeather("31.08.2018;" + WEATHER_TIMES[i]))
+            .WillRepeatedly(Return(RESULTS[i]));
+    }
 
     ASSERT_EQ(client.GetAverageTemperature(server, "31.08.2018"), 15);
 }
