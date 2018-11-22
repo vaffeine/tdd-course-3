@@ -138,6 +138,12 @@ public:
 
     double GetMaximumTemperature(IWeatherServer& server, const std::string& date) override
     {
+        double max = get_weather(server, date, WEATHER_TIMES[0]).temperature;
+        for (size_t i = 1; i < WEATHER_RECORDS_PER_DAY; ++i) {
+            double temp = get_weather(server, date, WEATHER_TIMES[i]).temperature;
+            max = std::max(temp, max);
+        }
+        return max;
     }
 
     double GetAverageWindDirection(IWeatherServer& server, const std::string& date) override
