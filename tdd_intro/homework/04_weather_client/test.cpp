@@ -109,6 +109,11 @@ static const std::string WEATHER_TIMES[WEATHER_RECORDS_PER_DAY] = {
     "03:00", "09:00", "15:00", "21:00"
 };
 
+Weather get_weather(IWeatherServer& server, const std::string &date, const std::string &time)
+{
+    return Weather(server.GetWeather(date + ";" + time));
+}
+
 class WeatherClient: public IWeatherClient
 {
 public:
@@ -116,16 +121,16 @@ public:
     {
         double sum = 0.0;
         for (auto &time: WEATHER_TIMES) {
-            sum += Weather(server.GetWeather(date + ";" + time)).temperature;
+            sum += get_weather(server, date, time).temperature;
         }
         return sum / 4.0;
     }
 
     double GetMinimumTemperature(IWeatherServer& server, const std::string& date) override
     {
-        double min = Weather(server.GetWeather(date + ";" + WEATHER_TIMES[0])).temperature;
+        double min = get_weather(server, date, WEATHER_TIMES[0]).temperature;
         for (size_t i = 1; i < WEATHER_RECORDS_PER_DAY; ++i) {
-            double temp = Weather(server.GetWeather(date + ";" + WEATHER_TIMES[i])).temperature;
+            double temp = get_weather(server, date, WEATHER_TIMES[i]).temperature;
             min = std::min(temp, min);
         }
         return min;
