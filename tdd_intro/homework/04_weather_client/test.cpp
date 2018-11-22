@@ -114,36 +114,47 @@ Weather get_weather(IWeatherServer& server, const std::string &date, const std::
     return Weather(server.GetWeather(date + ";" + time));
 }
 
+Weather fold_temperature(IWeatherServer& server, const std::string& date, void (*func)(Weather&, const Weather&))
+{
+    auto accum = get_weather(server, date, WEATHER_TIMES[0]);
+    for (size_t i = 1; i < WEATHER_RECORDS_PER_DAY; ++i) {
+        auto temp = get_weather(server, date, WEATHER_TIMES[i]);
+        func(accum, temp);
+    }
+    return accum;
+}
+
 class WeatherClient: public IWeatherClient
 {
 public:
     double GetAverageTemperature(IWeatherServer& server, const std::string& date) override
     {
-        double sum = 0.0;
-        for (auto &time: WEATHER_TIMES) {
-            sum += get_weather(server, date, time).temperature;
-        }
-        return sum / 4.0;
+        Weather sum = fold_temperature(server, date,
+            [](Weather& accum, const Weather& w) {
+                accum.temperature += w.temperature;
+            }
+        );
+        return sum.temperature / 4.0;
     }
 
     double GetMinimumTemperature(IWeatherServer& server, const std::string& date) override
     {
-        double min = get_weather(server, date, WEATHER_TIMES[0]).temperature;
-        for (size_t i = 1; i < WEATHER_RECORDS_PER_DAY; ++i) {
-            double temp = get_weather(server, date, WEATHER_TIMES[i]).temperature;
-            min = std::min(temp, min);
-        }
-        return min;
+        auto min = fold_temperature(server, date,
+            [](Weather& accum, const Weather& w) {
+                accum.temperature = std::min(w.temperature, accum.temperature);
+            }
+        );
+        return min.temperature;
     }
 
     double GetMaximumTemperature(IWeatherServer& server, const std::string& date) override
     {
-        double max = get_weather(server, date, WEATHER_TIMES[0]).temperature;
-        for (size_t i = 1; i < WEATHER_RECORDS_PER_DAY; ++i) {
-            double temp = get_weather(server, date, WEATHER_TIMES[i]).temperature;
-            max = std::max(temp, max);
-        }
-        return max;
+        auto max = fold_temperature(server, date,
+            [](Weather& accum, const Weather& w) {
+                accum.temperature = std::max(w.temperature, accum.temperature);
+            }
+        );
+        return max.temperature;
     }
 
     double GetAverageWindDirection(IWeatherServer& server, const std::string& date) override
@@ -232,6 +243,21 @@ TEST(WeatherClientTest, max_temp_for_4_different_return_their_average) {
     ASSERT_EQ(client.GetMaximumTemperature(server, "31.08.2018"), 25.0);
 }
 
+TEST(WeatherClientTest, average_wind_dir_for_4_different_return_their_average) {
+    static const std::string RESULTS[WEATHER_RECORDS_PER_DAY] = {
+        "10;30;5.1", "15;60;5.1", "20;90;5.1", "25;120;5.1"
+    };
+
+    MockWeatherServer server;
+    WeatherClient client;
+
+    for (size_t i = 0; i < WEATHER_RECORDS_PER_DAY; ++i) {
+        EXPECT_CALL(server, GetWeather("31.08.2018;" + WEATHER_TIMES[i]))
+            .WillRepeatedly(Return(RESULTS[i]));
+    }
+
+    ASSERT_EQ(client.GetAverageWindDirection(server, "31.08.2018"), 75.0);
+}
 TEST(WeatherTest, temperature_is_parsed_correctly) {
     ASSERT_EQ(Weather("20;181;5.1").temperature, 20);
 }
