@@ -159,6 +159,12 @@ public:
 
     double GetAverageWindDirection(IWeatherServer& server, const std::string& date) override
     {
+        auto sum = fold_temperature(server, date,
+            [](Weather& accum, const Weather& w) {
+                accum.windDirection += w.windDirection;
+            }
+        );
+        return sum.windDirection / 4.0;
     }
 
     double GetMaximumWindSpeed(IWeatherServer& server, const std::string& date) override
@@ -258,6 +264,7 @@ TEST(WeatherClientTest, average_wind_dir_for_4_different_return_their_average) {
 
     ASSERT_EQ(client.GetAverageWindDirection(server, "31.08.2018"), 75.0);
 }
+
 TEST(WeatherTest, temperature_is_parsed_correctly) {
     ASSERT_EQ(Weather("20;181;5.1").temperature, 20);
 }
