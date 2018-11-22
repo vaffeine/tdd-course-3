@@ -169,6 +169,12 @@ public:
 
     double GetMaximumWindSpeed(IWeatherServer& server, const std::string& date) override
     {
+        auto max = fold_temperature(server, date,
+            [](Weather& accum, const Weather& w) {
+                accum.windSpeed = std::max(w.windSpeed, accum.windSpeed);
+            }
+        );
+        return max.windSpeed;
     }
 };
 
