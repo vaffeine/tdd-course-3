@@ -48,11 +48,11 @@ IMPORTANT:
 #include <gmock/gmock.h>
 
 template<typename T>
-size_t parse_int(const std::string& str, size_t pos, T &out)
+size_t parse_number(const std::string& str, size_t pos, T &out)
 {
     auto next_pos = str.find(";", pos);
     std::string tmp = str.substr(pos, next_pos);
-    out = std::stoi(tmp);
+    out = std::stod(tmp);
 
     return next_pos;
 }
@@ -65,8 +65,9 @@ struct Weather
 
     Weather(const std::string& str)
     {
-        auto temp_pos = parse_int(str, 0, temperature);
-        auto dir_pos = parse_int(str, temp_pos + 1, windDirection);
+        auto temp_pos = parse_number(str, 0, temperature);
+        auto dir_pos = parse_number(str, temp_pos + 1, windDirection);
+        parse_number(str, dir_pos + 1, windSpeed);
     }
 
     bool operator==(const Weather& right)
@@ -108,6 +109,8 @@ class WeatherClient: public IWeatherClient
 public:
     double GetAverageTemperature(IWeatherServer& server, const std::string& date) override
     {
+        Weather w(server.GetWeather(date + ";03:00"));
+        return w.temperature;
     }
 
     double GetMinimumTemperature(IWeatherServer& server, const std::string& date) override
@@ -140,10 +143,33 @@ TEST(WeatherClientTest, average_temp_for_same_return_it) {
     ASSERT_EQ(client.GetAverageTemperature(server, "31.08.2018"), 20);
 }
 
+TEST(WeatherClientTest, average_temp_for_2_different_return_their_average) {
+    MockWeatherServer server;
+    WeatherClient client;
+
+    EXPECT_CALL(server, GetWeather("31.08.2018;03:00"))
+        .WillRepeatedly(Return("20;181;5.1"));
+
+    EXPECT_CALL(server, GetWeather("31.08.2018;09:00"))
+        .WillRepeatedly(Return("10;181;5.1"));
+
+    EXPECT_CALL(server, GetWeather("31.08.2018;15:00"))
+        .WillRepeatedly(Return("20;181;5.1"));
+
+    EXPECT_CALL(server, GetWeather("31.08.2018;21:00"))
+        .WillRepeatedly(Return("10;181;5.1"));
+
+    ASSERT_EQ(client.GetAverageTemperature(server, "31.08.2018"), 15);
+}
+
 TEST(WeatherTest, temperature_is_parsed_correctly) {
     ASSERT_EQ(Weather("20;181;5.1").temperature, 20);
 }
 
 TEST(WeatherTest, wind_direction_is_parsed_correctly) {
     ASSERT_EQ(Weather("20;181;5.1").windDirection, 181);
+}
+
+TEST(WeatherTest, wind_speed_is_parsed_correctly) {
+    ASSERT_EQ(Weather("20;181;5.1").windSpeed, 5.1);
 }
