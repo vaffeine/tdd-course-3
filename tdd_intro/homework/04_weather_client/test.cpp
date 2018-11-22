@@ -52,6 +52,9 @@ struct Weather
     short temperature = 0;
     unsigned short windDirection = 0;
     double windSpeed = 0;
+
+    Weather(const std::string& str) {  }
+
     bool operator==(const Weather& right)
     {
         return temperature == right.temperature &&
@@ -121,4 +124,8 @@ TEST(WeatherClientTest, average_temp_for_same_return_it) {
         .WillRepeatedly(Return("20;181;5.1"));
 
     ASSERT_EQ(client.GetAverageTemperature(server, "31.08.2018"), 20);
+}
+
+TEST(WeatherTest, temperature_is_parsed_correctly) {
+    ASSERT_EQ(Weather("20;181;5.1").temperature, 20);
 }
