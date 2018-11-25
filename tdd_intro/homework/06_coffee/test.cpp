@@ -67,9 +67,18 @@ public:
     {
         switch (coffee) {
             case Coffee::Americano:
-                m_source.AddCoffee(75);
-                m_source.SetCupSize(100);
-                m_source.AddWater(25, 60);
+                switch (cup) {
+                    case Cup::Normal:
+                        m_source.AddCoffee(75);
+                        m_source.SetCupSize(100);
+                        m_source.AddWater(25, 60);
+                        break;
+                    case Cup::Big:
+                        m_source.AddCoffee(105);
+                        m_source.SetCupSize(140);
+                        m_source.AddWater(35, 60);
+                        break;
+                }
                 break;
         }
     }
