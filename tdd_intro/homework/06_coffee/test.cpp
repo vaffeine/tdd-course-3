@@ -34,8 +34,8 @@ public:
 
 enum Cup
 {
-    Normal,
-    Big
+    Normal = 100,
+    Big = 140,
 };
 
 enum Coffee
@@ -65,23 +65,39 @@ public:
     }
     void CreateCoffee(const Cup cup, const Coffee coffee)
     {
-        switch (coffee) {
-            case Coffee::Americano:
-                switch (cup) {
-                    case Cup::Normal:
-                        m_source.AddCoffee(75);
-                        m_source.SetCupSize(100);
-                        m_source.AddWater(25, 60);
-                        break;
-                    case Cup::Big:
-                        m_source.AddCoffee(105);
-                        m_source.SetCupSize(140);
-                        m_source.AddWater(35, 60);
-                        break;
-                }
+        m_source.SetCupSize(cup);
+
+        switch (cup) {
+            case Cup::Normal:
+                CreateNormalCoffee(coffee);
+                break;
+            case Cup::Big:
+                CreateBigCoffee(coffee);
                 break;
         }
     }
+
+private:
+    void CreateNormalCoffee(const Coffee coffee)
+    {
+        switch (coffee) {
+            case Coffee::Americano:
+                m_source.AddCoffee(75);
+                m_source.AddWater(25, 60);
+                break;
+        }
+    }
+
+    void CreateBigCoffee(const Coffee coffee)
+    {
+        switch (coffee) {
+            case Coffee::Americano:
+                m_source.AddCoffee(105);
+                m_source.AddWater(35, 60);
+                break;
+        }
+    }
+
 private:
     ISourceOfIngredients& m_source;
 };
@@ -121,24 +137,26 @@ TEST(CoffeeMachine, CallsImportantThings)
 //- americano: water & coffee 1:3 Water temp 60C
 TEST(CoffeeMachine, Americano)
 {
+    auto cup = Cup::Normal;
     MockSourceOfIngredients si;
     CoffeeMachine cm(si);
 
     EXPECT_CALL(si, AddCoffee(75)).Times(1);
-    EXPECT_CALL(si, SetCupSize(100)).Times(1);
+    EXPECT_CALL(si, SetCupSize(cup)).Times(1);
     EXPECT_CALL(si, AddWater(25, 60)).Times(1);
 
-    cm.CreateCoffee(Cup::Normal, Coffee::Americano);
+    cm.CreateCoffee(cup, Coffee::Americano);
 }
 
 TEST(CoffeeMachine, AmericanoBig)
 {
+    auto cup = Cup::Big;
     MockSourceOfIngredients si;
     CoffeeMachine cm(si);
 
     EXPECT_CALL(si, AddCoffee(105)).Times(1);
-    EXPECT_CALL(si, SetCupSize(140)).Times(1);
+    EXPECT_CALL(si, SetCupSize(cup)).Times(1);
     EXPECT_CALL(si, AddWater(35, 60)).Times(1);
 
-    cm.CreateCoffee(Cup::Big, Coffee::Americano);
+    cm.CreateCoffee(cup, Coffee::Americano);
 }
