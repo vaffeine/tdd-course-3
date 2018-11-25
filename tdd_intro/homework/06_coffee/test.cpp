@@ -180,3 +180,17 @@ TEST(CoffeeMachine, Cappuccino)
 
     cm.CreateCoffee(cup, Coffee::Cappuccino);
 }
+
+TEST(CoffeeMachine, CappuccinoBig)
+{
+    auto cup = Cup::Big;
+    MockSourceOfIngredients si;
+    CoffeeMachine cm(si);
+
+    EXPECT_CALL(si, SetCupSize(cup)).Times(1);
+    EXPECT_CALL(si, AddCoffee(46)).Times(1);
+    EXPECT_CALL(si, AddMilk(46)).Times(1);
+    EXPECT_CALL(si, AddMilkFoam(46)).Times(1);
+
+    cm.CreateCoffee(cup, Coffee::Cappuccino);
+}
