@@ -42,6 +42,8 @@ enum Coffee
 {
     Americano,
     Cappuccino,
+    Latte,
+    Marochino,
 };
 
 class MockSourceOfIngredients : public ISourceOfIngredients
@@ -91,6 +93,16 @@ private:
                 m_source.AddMilk(33);
                 m_source.AddMilkFoam(33);
                 break;
+            case Coffee::Latte:
+                m_source.AddCoffee(50);
+                m_source.AddMilk(25);
+                m_source.AddMilkFoam(25);
+                break;
+            case Coffee::Marochino:
+                m_source.AddCoffee(25);
+                m_source.AddChocolate(25);
+                m_source.AddMilkFoam(25);
+                break;
         }
     }
 
@@ -100,6 +112,21 @@ private:
             case Coffee::Americano:
                 m_source.AddCoffee(105);
                 m_source.AddWater(35, 60);
+                break;
+            case Coffee::Cappuccino:
+                m_source.AddCoffee(46);
+                m_source.AddMilk(46);
+                m_source.AddMilkFoam(46);
+                break;
+            case Coffee::Latte:
+                m_source.AddCoffee(70);
+                m_source.AddMilk(35);
+                m_source.AddMilkFoam(35);
+                break;
+            case Coffee::Marochino:
+                m_source.AddCoffee(35);
+                m_source.AddChocolate(35);
+                m_source.AddMilkFoam(35);
                 break;
         }
     }
@@ -193,4 +220,60 @@ TEST(CoffeeMachine, CappuccinoBig)
     EXPECT_CALL(si, AddMilkFoam(46)).Times(1);
 
     cm.CreateCoffee(cup, Coffee::Cappuccino);
+}
+
+TEST(CoffeeMachine, Latte)
+{
+    auto cup = Cup::Normal;
+    MockSourceOfIngredients si;
+    CoffeeMachine cm(si);
+
+    EXPECT_CALL(si, SetCupSize(cup)).Times(1);
+    EXPECT_CALL(si, AddCoffee(50)).Times(1);
+    EXPECT_CALL(si, AddMilk(25)).Times(1);
+    EXPECT_CALL(si, AddMilkFoam(25)).Times(1);
+
+    cm.CreateCoffee(cup, Coffee::Latte);
+}
+
+TEST(CoffeeMachine, LatterBig)
+{
+    auto cup = Cup::Big;
+    MockSourceOfIngredients si;
+    CoffeeMachine cm(si);
+
+    EXPECT_CALL(si, SetCupSize(cup)).Times(1);
+    EXPECT_CALL(si, AddCoffee(70)).Times(1);
+    EXPECT_CALL(si, AddMilk(35)).Times(1);
+    EXPECT_CALL(si, AddMilkFoam(35)).Times(1);
+
+    cm.CreateCoffee(cup, Coffee::Latte);
+}
+
+TEST(CoffeeMachine, Marochino)
+{
+    auto cup = Cup::Normal;
+    MockSourceOfIngredients si;
+    CoffeeMachine cm(si);
+
+    EXPECT_CALL(si, SetCupSize(cup)).Times(1);
+    EXPECT_CALL(si, AddCoffee(25)).Times(1);
+    EXPECT_CALL(si, AddChocolate(25)).Times(1);
+    EXPECT_CALL(si, AddMilkFoam(25)).Times(1);
+
+    cm.CreateCoffee(cup, Coffee::Marochino);
+}
+
+TEST(CoffeeMachine, MarochinoBig)
+{
+    auto cup = Cup::Big;
+    MockSourceOfIngredients si;
+    CoffeeMachine cm(si);
+
+    EXPECT_CALL(si, SetCupSize(cup)).Times(1);
+    EXPECT_CALL(si, AddCoffee(35)).Times(1);
+    EXPECT_CALL(si, AddChocolate(35)).Times(1);
+    EXPECT_CALL(si, AddMilkFoam(35)).Times(1);
+
+    cm.CreateCoffee(cup, Coffee::Marochino);
 }
